@@ -39,7 +39,7 @@ function preload(){
 
 function setup() {
   
- createCanvas(600, 200);
+ createCanvas(windowWidth,windowHeight);
 
   //criar um sprite do trex
   trex = createSprite(50,180,20,50);
@@ -48,12 +48,12 @@ function setup() {
   trex.scale = 0.5;
 
   //criar um sprite do solo
-  solo = createSprite(200,180,400,20);
+  solo = createSprite(200,height/2,width,20);
   solo.addImage(imagemdosolo);
   solo.x = solo.width /2;
   
   //solo invisível
-  soloInvisivel = createSprite(200,195,650,20)
+  soloInvisivel = createSprite(200,height/2+10,width,20)
   soloInvisivel.visible = false
   
   //criar grupos
@@ -65,9 +65,9 @@ function setup() {
   trex.debug = false;
   trex.setCollider("circle",20,0,40);
   
-  gameOver = createSprite(300,100);
+  gameOver = createSprite(width/2,height/2-75);
   gameOver.addImage(gameoverImg);
-  restart = createSprite(300,140,25,25);
+  restart = createSprite(width/2,height/2-30);
   restart.addImage(restartImg);
   restart.scale = 0.5;
 }
@@ -94,9 +94,10 @@ function draw() {
     }
     
     //o trex pula quando a tecla espaço é acionada 
-    if(keyDown("space") && trex.y >= 110) {
+    if(touches.length > 0 || keyDown("space") && trex.y >= height/2-70) {
       trex.velocityY = -10;
       somJump.play();
+      touches = [];
     }
     
     //gravidade
@@ -149,9 +150,9 @@ function draw() {
 
 function gerarObstaculos(){
   if(frameCount % 60 === 0){
-    obstaculos = createSprite(600,160,10,40);
+    obstaculos = createSprite(width,height/2-10,10,40);
     obstaculos.velocityX = -(4+pontuacao/100);
-    obstaculos.lifetime = 220;
+    obstaculos.lifetime = 600;
     obstaculos.scale = 0.5;
     
     var aleatorio = Math.round(random(1,6));
@@ -178,11 +179,11 @@ function gerarObstaculos(){
 
 function gerarNuvens(){
   if (frameCount % 60 === 0){
-    nuvem = createSprite(600,100,40,10);
+    nuvem = createSprite(width,100,40,10);
     nuvem.addImage(imagemNuvem);
     nuvem.velocityX = -3;
     nuvem.y = Math.round(random(10,100));
-    nuvem.lifetime = 220;
+    nuvem.lifetime = 600;
     
     //profundidade
     nuvem.depth = trex.depth;
